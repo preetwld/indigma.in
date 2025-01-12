@@ -65,7 +65,7 @@ export default function LandingPage() {
           <div className="text-center space-y-6">
             <h2 className="text-3xl font-bold tracking-tight">Contact Us</h2>
             <p className="text-gray-600">
-            "We'd love to hear from you. Feel free to reach out!"
+            &quot;We&apos;d love to hear from you. Feel free to reach out!&quot;
             </p>
             <Button 
               className="text-lg px-8 py-4 border border-black bg-black text-white hover:bg-gray-800"
