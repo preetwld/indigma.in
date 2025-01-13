@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { InstagramIcon, TwitterIcon } from 'lucide-react'
+
 
 
 export default function LandingPage() {
