@@ -85,7 +85,7 @@ export default function LandingPage() {
     className="rounded-full hover:scale-110 transition-transform"
   >
     <a
-      href="https://instagram.com/preetwld/"
+      href="https://instagram.com/preet.wld/ "
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Instagram"
