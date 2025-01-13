@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { InstagramIcon, TwitterIcon } from 'lucide-react'
+
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
@@ -71,10 +73,50 @@ export default function LandingPage() {
               className="text-lg px-8 py-4 border border-black bg-black text-white hover:bg-gray-800"
               onClick={() => window.location.href = 'mailto:preet@indigma.in'}
             >
-              Email: preet@indigma.in
+              Email: Preet@indigma.in
             </Button>
+
+            <div className="flex items-center gap-4 pt-4">
+  {/* Instagram Button */}
+  <Button
+    asChild
+    variant="ghost"
+    size="icon"
+    className="rounded-full hover:scale-110 transition-transform"
+  >
+    <a
+      href="https://instagram.com/preetwld"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+    >
+      {/* Use the Instagram SVG */}
+      <img src="/instagram.svg" alt="Instagram" className="w-5 h-5" />
+    </a>
+  </Button>
+
+  {/* X (Twitter) Button */}
+  <Button
+    asChild
+    variant="ghost"
+    size="icon"
+    className="rounded-full hover:scale-110 transition-transform"
+  >
+    <a
+      href="https://x.com/p1c1x"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Twitter/X"
+    >
+      {/* Use the X SVG */}
+      <img src="/x.svg" alt="Twitter/X" className="w-5 h-5" />
+    </a>
+  </Button>
+</div>
+
+
             <p className="text-sm text-gray-500">
-              We aim to respond to all inquiries within 24 hours.
+              Kind people are always beautiful, be kind.
             </p>
           </div>
         </div>
