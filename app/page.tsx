@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
  */
 export default function LandingPage() {
   const [isContactVisible, setIsContactVisible] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null); // Ensure proper typing
+  const canvasRef = useRef<HTMLCanvasElement | null>(null); // Properly typed canvasRef
   const quotes = [
     "Kindness is free. Sprinkle it everywhere.",
     "A kind word is like a spring day.",
@@ -45,7 +45,8 @@ export default function LandingPage() {
 
   // Handles scroll visibility for the contact section
   useScrollEffect(setIsContactVisible);
-  // Sets up the animated gradient and hidden quotes with cursor interaction
+
+  // Sets up the animated gradient and grid-based quote placement
   useGradientCanvas(canvasRef, quotes);
 
   return (
@@ -75,9 +76,12 @@ function useScrollEffect(setIsVisible: React.Dispatch<React.SetStateAction<boole
 }
 
 /**
- * Custom Hook: Manages gradient canvas animation, cursor effect, and hidden quotes.
+ * Custom Hook: Manages gradient canvas animation, cursor effect, and grid-based quote placement.
  */
-function useGradientCanvas(canvasRef: React.RefObject<HTMLCanvasElement>, quotes: string[]) {
+function useGradientCanvas(
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
+  quotes: string[]
+) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -94,15 +98,38 @@ function useGradientCanvas(canvasRef: React.RefObject<HTMLCanvasElement>, quotes
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
 
-      // Randomize positions for quotes on resize
+      // Define grid dimensions
+      const rows = 5; // Number of rows
+      const cols = 5; // Number of columns
+      const cellWidth = canvas.width / cols;
+      const cellHeight = canvas.height / rows;
+
+      // Clear previous positions
       quotePositions.length = 0;
-      quotes.forEach((quote) => {
-        quotePositions.push({
-          text: quote,
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-        });
-      });
+
+      let quoteIndex = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          if (quoteIndex >= quotes.length) break; // Stop if we've placed all quotes
+
+          // Calculate random position within the current grid cell
+          const x = col * cellWidth + Math.random() * cellWidth * 0.8;
+          const y = row * cellHeight + Math.random() * cellHeight * 0.8;
+
+          // Skip placing quotes inside the contact box
+          const contactBox = canvas.getBoundingClientRect();
+          const contactMargin = 150; // Buffer zone for the contact section
+          if (
+            y > canvas.height - contactMargin // Exclude bottom area
+          ) {
+            continue;
+          }
+
+          // Add quote position
+          quotePositions.push({ text: quotes[quoteIndex], x, y });
+          quoteIndex++;
+        }
+      }
     };
 
     // Update canvas size on window resize
@@ -118,7 +145,7 @@ function useGradientCanvas(canvasRef: React.RefObject<HTMLCanvasElement>, quotes
 
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Draw gradient, disruption effect, and hidden quotes
+    // Draw gradient, disruption effect, and grid-based quotes
     const drawGradient = () => {
       const w = canvas.width;
       const h = canvas.height;
@@ -133,37 +160,17 @@ function useGradientCanvas(canvasRef: React.RefObject<HTMLCanvasElement>, quotes
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
 
-      // Draw hidden quotes
+      // Draw quotes in their grid positions
       quotePositions.forEach(({ text, x, y }) => {
         const distance = Math.sqrt(
           Math.pow(cursor.x - x, 2) + Math.pow(cursor.y - y, 2)
         );
-        const opacity = Math.max(0, 1 - distance / 150); // Closer quotes are brighter
+        const opacity = Math.max(0.5, 1 - distance / 150); // Closer quotes are brighter
 
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.font = "16px Arial";
         ctx.fillText(text, x, y);
       });
-
-      // Disruption effect around cursor
-      const disruptionRadius = 100;
-      const disruptionGradient = ctx.createRadialGradient(
-        cursor.x,
-        cursor.y,
-        0,
-        cursor.x,
-        cursor.y,
-        disruptionRadius
-      );
-      disruptionGradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
-      disruptionGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-      ctx.globalCompositeOperation = "overlay";
-      ctx.fillStyle = disruptionGradient;
-      ctx.beginPath();
-      ctx.arc(cursor.x, cursor.y, disruptionRadius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.globalCompositeOperation = "source-over";
     };
 
     // Animation loop
@@ -196,10 +203,8 @@ function HeroSection() {
         backgroundPosition: "center",
       }}
     >
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Content */}
       <div className="absolute top-1/4 w-full text-center text-white px-4">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">Indigma</h1>
         <p className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto">
@@ -226,7 +231,7 @@ function ContactSection({
   canvasRef,
 }: {
   isVisible: boolean;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }) {
   return (
     <section
@@ -235,10 +240,8 @@ function ContactSection({
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      {/* Gradient Canvas */}
       <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full -z-10" />
 
-      {/* Contact Content */}
       <div className="max-w-lg w-full p-8 bg-white/90 rounded-lg shadow-lg">
         <div className="text-center space-y-6">
           <h2 className="text-3xl font-bold tracking-tight">Contact Us</h2>
@@ -252,13 +255,11 @@ function ContactSection({
             Email: Preet@indigma.in
           </Button>
           <div className="flex items-center gap-4 pt-4">
-            {/* Instagram */}
             <SocialButton
               href="https://instagram.com/preet.wld/"
               label="Instagram"
               icon="/instagram.svg"
             />
-            {/* Twitter */}
             <SocialButton href="https://x.com/p1c1x" label="Twitter/X" icon="/x.svg" />
           </div>
           <p className="text-sm text-gray-500">Kind people are always beautiful, be kind.</p>
@@ -268,9 +269,6 @@ function ContactSection({
   );
 }
 
-/**
- * SocialButton Component: A reusable button for social media links.
- */
 function SocialButton({ href, label, icon }: { href: string; label: string; icon: string }) {
   return (
     <Button
