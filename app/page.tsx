@@ -94,42 +94,22 @@ function useGradientCanvas(
     const cursor = { x: -1000, y: -1000 }; // Cursor starts offscreen
     const quotePositions: { text: string; x: number; y: number }[] = [];
 
+    const reservedAreaHeight = 200; // Space reserved for the contact box
+
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
 
-      // Define grid dimensions
-      const rows = 5; // Number of rows
-      const cols = 5; // Number of columns
-      const cellWidth = canvas.width / cols;
-      const cellHeight = canvas.height / rows;
-
-      // Clear previous positions
+      // Randomize positions for quotes on resize, avoiding the reserved area
       quotePositions.length = 0;
-
-      let quoteIndex = 0;
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          if (quoteIndex >= quotes.length) break; // Stop if we've placed all quotes
-
-          // Calculate random position within the current grid cell
-          const x = col * cellWidth + Math.random() * cellWidth * 0.8;
-          const y = row * cellHeight + Math.random() * cellHeight * 0.8;
-
-          // Skip placing quotes inside the contact box
-          const contactBox = canvas.getBoundingClientRect();
-          const contactMargin = 150; // Buffer zone for the contact section
-          if (
-            y > canvas.height - contactMargin // Exclude bottom area
-          ) {
-            continue;
-          }
-
-          // Add quote position
-          quotePositions.push({ text: quotes[quoteIndex], x, y });
-          quoteIndex++;
-        }
-      }
+      quotes.forEach((quote) => {
+        let x, y;
+        do {
+          x = Math.random() * canvas.width;
+          y = Math.random() * canvas.height;
+        } while (y > canvas.height - reservedAreaHeight); // Ensure no quotes in reserved area
+        quotePositions.push({ text: quote, x, y });
+      });
     };
 
     // Update canvas size on window resize
@@ -145,7 +125,7 @@ function useGradientCanvas(
 
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Draw gradient, disruption effect, and grid-based quotes
+    // Draw gradient, disruption effect, and hidden quotes
     const drawGradient = () => {
       const w = canvas.width;
       const h = canvas.height;
@@ -160,17 +140,37 @@ function useGradientCanvas(
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
 
-      // Draw quotes in their grid positions
+      // Draw hidden quotes
       quotePositions.forEach(({ text, x, y }) => {
         const distance = Math.sqrt(
           Math.pow(cursor.x - x, 2) + Math.pow(cursor.y - y, 2)
         );
-        const opacity = Math.max(0.5, 1 - distance / 150); // Closer quotes are brighter
+        const opacity = Math.max(0, 1 - distance / 150); // Closer quotes are brighter
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.fillStyle = `rgba(100, 100, 100, ${opacity})`; // Darker gray for better readability
         ctx.font = "16px Arial";
         ctx.fillText(text, x, y);
       });
+
+      // Disruption effect around cursor
+      const disruptionRadius = 100;
+      const disruptionGradient = ctx.createRadialGradient(
+        cursor.x,
+        cursor.y,
+        0,
+        cursor.x,
+        cursor.y,
+        disruptionRadius
+      );
+      disruptionGradient.addColorStop(0, "rgba(255, 255, 255, 0.8)");
+      disruptionGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+      ctx.globalCompositeOperation = "overlay";
+      ctx.fillStyle = disruptionGradient;
+      ctx.beginPath();
+      ctx.arc(cursor.x, cursor.y, disruptionRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
     };
 
     // Animation loop
@@ -189,6 +189,7 @@ function useGradientCanvas(
     };
   }, [canvasRef, quotes]);
 }
+
 
 /**
  * HeroSection Component: Displays the hero section with title and call-to-action.
