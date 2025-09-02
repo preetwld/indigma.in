@@ -86,7 +86,7 @@ export default function IndigmaVentures() {
       <section className="mt-16 min-h-[calc(100vh-4rem)] flex items-center justify-center relative z-10">
         <div className="relative z-10 text-center w-full">
           {/* Outer Dark Container - Much Wider */}
-          <div className="bg-gradient-to-br from-slate-900/80 to-slate-900/80 backdrop-blur-sm p-6 rounded-[3rem] border border-slate-600/30 shadow-2xl shadow-black/50 mx-4 h-[calc(100vh-4rem)]">
+          <div className="bg-gradient-to-br from-slate-900/80 to-slate-900/80 backdrop-blur-sm p-6 rounded-[3rem] border border-slate-600/30 shadow-2xl shadow-black/50 mx-4 min-h-[calc(100vh-4rem)]">
             <div className="bg-gradient-to-br from-blue-50/95 to-blue-100/95 backdrop-blur-2xl px-12 py-10 rounded-[2.25rem] border border-blue-200/50 shadow-2xl shadow-blue-500/20 text-slate-800 h-full flex flex-col justify-center">
               <div className="bg-gradient-to-br from-blue-50/80 to-white/80 px-10 py-8 rounded-[1.75rem] border border-blue-100/50">
 
