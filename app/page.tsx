@@ -83,29 +83,30 @@ export default function IndigmaVentures() {
       </div>
 
       {/* Hero Section - fits in first viewport below navbar */}
-      <section className="mt-16 min-h-[calc(100vh-4rem)] flex items-center justify-center relative z-10">
-        <div className="relative z-10 text-center w-full">
-          {/* Outer Dark Container - Much Wider */}
-          <div className="bg-gradient-to-br from-slate-900/80 to-slate-900/80 backdrop-blur-sm p-6 rounded-[3rem] border border-slate-600/30 shadow-2xl shadow-black/50 mx-4 min-h-[calc(100vh-4rem)]">
-            <div className="bg-gradient-to-br from-blue-50/95 to-blue-100/95 backdrop-blur-2xl px-12 py-10 rounded-[2.25rem] border border-blue-200/50 shadow-2xl shadow-blue-500/20 text-slate-800 h-full flex flex-col justify-center">
-              <div className="bg-gradient-to-br from-blue-50/80 to-white/80 px-10 py-8 rounded-[1.75rem] border border-blue-100/50">
+      <section className="mt-16 min-h-[calc(100vh-4rem)] flex items-center justify-center relative z-10 px-4">
+        <div className="relative z-10 text-center w-full max-w-6xl mx-auto">
+          {/* Outer Dark Container - Responsive */}
+          <div className="bg-gradient-to-br from-slate-900/80 to-slate-900/80 backdrop-blur-sm p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[3rem] border border-slate-600/30 shadow-2xl shadow-black/50 min-h-[calc(100vh-8rem)] max-h-[calc(100vh-4rem)]">
+            <div className="bg-gradient-to-br from-blue-50/95 to-blue-100/95 backdrop-blur-2xl px-6 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.25rem] border border-blue-200/50 shadow-2xl shadow-blue-500/20 text-slate-800 h-full flex flex-col justify-center">
+              <div className="bg-gradient-to-br from-blue-50/80 to-white/80 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 rounded-[1rem] sm:rounded-[1.5rem] lg:rounded-[1.75rem] border border-blue-100/50">
 
-                <h1 className="text-6xl md:text-7xl font-black mb-4 tracking-tight bg-gradient-to-r from-slate-700 to-blue-800 bg-clip-text text-transparent">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-3 sm:mb-4 tracking-tight bg-gradient-to-r from-slate-700 to-blue-800 bg-clip-text text-transparent">
                   INDIGMA
                 </h1>
-                <div className="w-full h-2 bg-gradient-to-r from-blue-300 to-blue-400 mb-4 rounded-full shadow-inner" />
-                <h2 className="text-3xl md:text-4xl font-bold mb-8 tracking-wide bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
+                <div className="w-full h-1 sm:h-2 bg-gradient-to-r from-blue-300 to-blue-400 mb-3 sm:mb-4 rounded-full shadow-inner" />
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 tracking-wide bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
                   VENTURES
                 </h2>
 
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-10 lg:mb-12 max-w-5xl mx-auto">
+
                   {systemBoxes.map((box, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-white/70 backdrop-blur-sm border border-blue-200/50 p-6 rounded-2xl hover:bg-white/90 transition-all duration-300 group shadow-lg shadow-blue-100/30"
+                      className="bg-white/70 backdrop-blur-sm border border-blue-200/50 p-3 sm:p-4 lg:p-6 rounded-lg sm:rounded-xl lg:rounded-2xl hover:bg-white/90 transition-all duration-300 group shadow-lg shadow-blue-100/30"
                     >
                       <div className="flex items-center justify-center mb-3 text-blue-500 group-hover:scale-110 transition-transform">
                         {box.icon}
@@ -125,7 +126,7 @@ export default function IndigmaVentures() {
                   ))}
                 </div>
 
-                <p className="text-2xl mb-12 font-bold tracking-wide bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent max-w-5xl mx-auto">
+                <p className="text-lg sm:text-xl lg:text-2xl mb-8 sm:mb-10 lg:mb-12 font-bold tracking-wide bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent max-w-4xl mx-auto px-4">
                   POWERING THE LED REVOLUTION IN ADVERTISEMENT
                 </p>
 
